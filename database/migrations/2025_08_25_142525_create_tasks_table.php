@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('priority', ['low', 'medium', 'high']);
             $table->date('due_date')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('done')->default(false);
             $table->timestamps();
         });
     }
