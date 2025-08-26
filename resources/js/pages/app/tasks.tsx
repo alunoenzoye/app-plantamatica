@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface tasksProps {
-    tasks: Task[]
+    tasks: App.Data.TaskData[]
 }
 
 
