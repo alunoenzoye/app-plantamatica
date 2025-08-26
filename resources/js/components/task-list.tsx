@@ -92,7 +92,10 @@ interface taskListProps {
 }
 
 export default function TaskList({ tasks }: taskListProps) {
+    <div className="w-[36px]"></div>
     return (
-        <DataTable columns={columns} data={tasks} />
+        <DataTable columns={columns} data={tasks} columnStyleArray={[
+            "w-8"
+        ]}/>
     )
 }
