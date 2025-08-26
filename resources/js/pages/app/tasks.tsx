@@ -1,14 +1,10 @@
-import { DataTable } from '@/components/data-table';
 import TaskCreateForm from '@/components/task-create-form';
+import TaskList from '@/components/task-list';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Task, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { ColumnDef } from '@tanstack/react-table';
-import { formatDate } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,49 +18,6 @@ interface tasksProps {
     tasks: Task[]
 }
 
-const priorityStyles = {
-    low: {
-        text: "Baixo",
-        className: "text-green-700"
-    },
-    medium: {
-        text: "Médio",
-        className: "text-yellow-600"
-    },
-    high: {
-        text: "Alto",
-        className: "text-red-600"
-    },
-}
-
-const columns: ColumnDef<Task>[] = [
-    {
-        accessorKey: "name",
-        header: "Nome"
-    },
-    {
-        accessorKey: "priority",
-        header: "Prioridade",
-        cell: ({ row }) => {
-            const priorityStyle = priorityStyles[row.getValue("priority") as keyof typeof priorityStyles];
-
-            return <span className={priorityStyle.className}>{priorityStyle.text}</span>
-        }
-    },
-    {
-        accessorKey: "due_date",
-        header: "Prazo",
-        cell: ({ row }) => {
-            const date: Date = row.getValue("due_date");
-
-            return formatDate(date, "dd/MM/yyyy")
-        }
-    },
-    // {
-    //     accessorKey: "name",
-    //     header: "Nome"
-    // },
-]
 
 export default function Tasks({ tasks }: tasksProps) {
     return (
@@ -77,7 +30,7 @@ export default function Tasks({ tasks }: tasksProps) {
                     </Button>
                 } />
                 <Separator className="mt-2 mb-2" />
-                <DataTable columns={columns} data={tasks} />
+                <TaskList tasks={tasks}/>
             </div>
         </AppLayout >
     );
