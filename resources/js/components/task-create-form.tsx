@@ -166,7 +166,7 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel>Descrição</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder="Descrição da tarefa" {...field} />
                                     </FormControl>
