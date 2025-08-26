@@ -28,23 +28,32 @@ const columns: ColumnDef<App.Data.TaskData>[] = [
     // },
     columnHelper.display({
         id: "complete_checkbox",
-        size: 32,
         cell: ((props) => {
             const done = props.row.original.done;
 
-            return <Checkbox
-                className="hover:cursor-pointer"
+            return (<Checkbox
+                className="hover:cursor-pointer p-0"
                 checked={done}
-                onCheckedChange={(checked) => {
-                    if (checked === true) {
-                        router.patch(route('tasks.complete', {
-                            id: props.row.original.id
-                        }));
-                        router.reload();
-                    }
+                onCheckedChange={() => {
+                    router.patch(route(
+                        'tasks.complete', props.row.original.id),
+                        {
+                            done: !props.row.original.done
+                        }
+                    );
+                    router.reload();
                 }}
-            />
-        })
+            />)
+        }),
+        // cell: ({ row }) => (
+        //     <Checkbox
+        //         checked={row.getIsSelected()}
+        //         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        //         aria-label="Select row"
+        //     />
+        // ),
+        enableSorting: false,
+        enableHiding: false,
     }),
     {
         accessorKey: "name",

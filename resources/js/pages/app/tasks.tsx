@@ -1,6 +1,7 @@
 import TaskCreateForm from '@/components/task-create-form';
 import TaskList from '@/components/task-list';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Task, type BreadcrumbItem } from '@/types';
