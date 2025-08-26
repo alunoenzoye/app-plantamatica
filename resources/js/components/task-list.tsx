@@ -29,7 +29,7 @@ const columns: ColumnDef<App.Data.TaskData>[] = [
     columnHelper.display({
         id: "complete_checkbox",
         size: 32,
-        cell: (( props ) => {
+        cell: ((props) => {
             const done = props.row.original.done;
 
             return <Checkbox
@@ -65,7 +65,11 @@ const columns: ColumnDef<App.Data.TaskData>[] = [
         cell: ({ row }) => {
             const date: Date = row.getValue("due_date");
 
-            return formatDate(date, "dd/MM/yyyy")
+            if (date) {
+                return formatDate(date, "dd/MM/yyyy")
+            } else {
+                return null;
+            }
         }
     },
     // {
