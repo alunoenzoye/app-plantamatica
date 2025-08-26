@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { ptBR } from "date-fns/locale";
 
 type fields = keyof z.infer<typeof TaskRequest>
@@ -25,6 +25,7 @@ interface taskCreateFormProps {
 
 export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
     const [open, setOpen] = useState(false);
+    const sendingRequest = useRef(false);
 
     const form = useForm<z.infer<typeof TaskRequest>>({
         resolver: zodResolver(TaskRequest),
@@ -37,6 +38,12 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
     })
 
     function onSubmit(values: z.infer<typeof TaskRequest>) {
+        if (sendingRequest.current == true) {
+            return;
+        }
+
+        sendingRequest.current = true;
+
         router.post(route('tasks.create'), values, {
             onError: (error) => {
                 for (const [field, message] of Object.entries(error)) {
@@ -47,8 +54,13 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                 }
             },
             onSuccess: () => {
-                setOpen(false)
+                setOpen(false);
+                form.reset();
                 router.reload();
+            },
+
+            onFinish: () => {
+                sendingRequest.current = false;
             }
         })
     }
