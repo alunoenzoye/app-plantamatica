@@ -23,6 +23,12 @@ interface taskCreateFormProps {
     openButton: ReactNode
 }
 
+const YEARS_VARIATION = 5;
+
+const currentDate = new Date()
+const dateAgo = new Date(currentDate.getFullYear() - YEARS_VARIATION, 11)
+const dateFuture = new Date(currentDate.getFullYear() + YEARS_VARIATION, 11)
+
 export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
     const [open, setOpen] = useState(false);
     const sendingRequest = useRef(false);
@@ -149,9 +155,8 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                                                     selected={field.value}
                                                     onSelect={field.onChange}
                                                     locale={ptBR}
-                                                    disabled={(date) =>
-                                                        date > new Date() || date < new Date("1900-01-01")
-                                                    }
+                                                    startMonth={dateAgo}
+                                                    endMonth={dateFuture}
                                                     captionLayout="dropdown"
                                                 />
                                             </PopoverContent>
