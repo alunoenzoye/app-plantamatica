@@ -37,7 +37,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
-            <Head title="Log in" />
+            <Head title="Entrar" />
 
             <div className="w-full max-w-sm flex flex-col gap-16">
                 <h1 className="font-extrabold text-center text-4xl">Entrar</h1>

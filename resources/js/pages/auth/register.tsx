@@ -33,7 +33,7 @@ export default function Register() {
 
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
-            <Head title="Register" />
+            <Head title="Cadastrar" />
 
             <div className="w-full max-w-sm flex flex-col gap-16">
                 <h1 className="font-extrabold text-center text-4xl">Entrar</h1>
