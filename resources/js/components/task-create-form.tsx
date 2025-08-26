@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { ReactNode, useState } from "react";
+import { ptBR } from "date-fns/locale";
 
 type fields = keyof z.infer<typeof TaskRequest>
 
@@ -120,7 +121,9 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                                                         )}
                                                     >
                                                         {field.value ? (
-                                                            format(field.value, "PPP")
+                                                            format(field.value, "PPP", {
+                                                                locale: ptBR
+                                                            })
                                                         ) : (
                                                             <span>Escolha o prazo</span>
                                                         )}
@@ -133,6 +136,7 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                                                     mode="single"
                                                     selected={field.value}
                                                     onSelect={field.onChange}
+                                                    locale={ptBR}
                                                     disabled={(date) =>
                                                         date > new Date() || date < new Date("1900-01-01")
                                                     }
