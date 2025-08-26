@@ -35,6 +35,7 @@ const columns: ColumnDef<App.Data.TaskData>[] = [
                 className="hover:cursor-pointer p-0"
                 checked={done}
                 onCheckedChange={() => {
+                    // TODO: update value instantly for feedback
                     router.patch(route(
                         'tasks.complete', props.row.original.id),
                         {
@@ -45,6 +46,7 @@ const columns: ColumnDef<App.Data.TaskData>[] = [
                 }}
             />)
         }),
+
         // cell: ({ row }) => (
         //     <Checkbox
         //         checked={row.getIsSelected()}
@@ -92,7 +94,6 @@ interface taskListProps {
 }
 
 export default function TaskList({ tasks }: taskListProps) {
-    <div className="w-[36px]"></div>
     return (
         <DataTable columns={columns} data={tasks} columnStyleArray={[
             "w-8"
