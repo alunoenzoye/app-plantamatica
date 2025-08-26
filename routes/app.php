@@ -6,9 +6,9 @@ use Inertia\Inertia;
 
 Route::middleware('auth')->group(function() {
     Route::get('painel', function() {
-        return Inertia::render('dashboard');
+        return Inertia::render('app/dashboard');
     })->name('dashboard');
 
-    Route::get('tarefas', [TaskController::class, 'index'])->name('tarefas');
-    // Route::post('tarefas', [TaskController::class, 'create'])->name('tarefas');
+    Route::get('tarefas', [TaskController::class, 'index'])->name('tasks.index');
+    Route::post('tarefas', [TaskController::class, 'create'])->name('tasks.create');
 });
