@@ -13,5 +13,5 @@ Route::middleware('auth')->group(function() {
     Route::get('tarefas', [TaskController::class, 'index'])->name('tasks.index');
     Route::post('tarefas', [TaskController::class, 'create'])->name('tasks.create');
 
-    Route::patch('tarefas/{task}', [CompleteTaskController::class, 'complete'])->name('tasks.complete');
+    Route::patch('tarefas/{task}/completar', [CompleteTaskController::class, 'complete'])->name('tasks.complete');
 });
