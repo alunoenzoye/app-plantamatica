@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2Icon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { ReactNode, useRef, useState } from "react";
 import { ptBR } from "date-fns/locale";
@@ -31,7 +31,7 @@ const dateFuture = new Date(currentDate.getFullYear() + YEARS_VARIATION, 11)
 
 export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
     const [open, setOpen] = useState(false);
-    const sendingRequest = useRef(false);
+    const [sendingRequest, setSendingRequest] = useState(false);
 
     const form = useForm<z.infer<typeof TaskRequest>>({
         resolver: zodResolver(TaskRequest),
@@ -44,11 +44,11 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
     })
 
     function onSubmit(values: z.infer<typeof TaskRequest>) {
-        if (sendingRequest.current == true) {
+        if (sendingRequest == true) {
             return;
         }
 
-        sendingRequest.current = true;
+        setSendingRequest(true);
 
         router.post(route('tasks.create'), values, {
             onError: (error) => {
@@ -66,7 +66,7 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
             },
 
             onFinish: () => {
-                sendingRequest.current = false;
+                setSendingRequest(false);
             }
         })
     }
@@ -183,7 +183,13 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                             <DialogClose asChild>
                                 <Button variant="outline">Cancelar</Button>
                             </DialogClose>
-                            <Button type="submit">Enviar</Button>
+                            <Button
+                                type="submit"
+                                disabled={sendingRequest}
+                            >
+                                {sendingRequest && <Loader2Icon className="animate-spin"/>}
+                                Enviar
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

@@ -31,7 +31,7 @@ export default function Tasks({ tasks }: tasksProps) {
                     </Button>
                 } />
                 <Separator className="mt-2 mb-2" />
-                <TaskList tasks={tasks}/>
+                <TaskList tasks={tasks} />
             </div>
         </AppLayout >
     );
