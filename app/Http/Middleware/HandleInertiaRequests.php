@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Spatie\Permission\Models\Role;
 use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -45,8 +47,13 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),
+                'can' => $request->user()?->loadMissing('roles.permissions')->roles->flatMap(function ($role) {
+                        return $role->permissions;
+                    })->map(function ($permission) {
+                        return [$permission['name'] => auth()->user()->can($permission['name'])];
+                    })->collapse()->all(),
             ],
-            'ziggy' => fn (): array => [
+            'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
