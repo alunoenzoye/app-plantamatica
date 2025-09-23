@@ -11,21 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('calls', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('creator_id');
             $table->foreign('creator_id')
                 ->references('id')
                 ->on('users');
-            $table->string('name', 255);
+            $table->string('name');
             $table->text('description')->nullable();
             $table->geometry('position', subtype: 'point', srid: 0);
-
-            // specific to the tasks table
-            $table->enum('priority', ['low', 'medium', 'high']);
-            $table->date('due_date')->nullable();
-            $table->boolean('done')->default(false);
-
             $table->timestamps();
         });
     }
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('calls');
     }
 };
