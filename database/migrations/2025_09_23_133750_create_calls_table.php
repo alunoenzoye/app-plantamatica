@@ -19,7 +19,7 @@ return new class extends Migration
                 ->on('users');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->geometry('position', subtype: 'point', srid: 0);
+            $table->geometry('position', subtype: 'point', srid: 0)->nullable();
             $table->timestamps();
         });
     }

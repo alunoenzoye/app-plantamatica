@@ -19,7 +19,7 @@ return new class extends Migration
                 ->on('users');
             $table->string('name', 255);
             $table->text('description')->nullable();
-            $table->geometry('position', subtype: 'point', srid: 0);
+            $table->geometry('position', subtype: 'point', srid: 0)->nullable();
 
             // specific to the tasks table
             $table->enum('priority', ['low', 'medium', 'high']);
