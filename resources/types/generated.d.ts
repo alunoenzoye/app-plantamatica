@@ -10,5 +10,7 @@ done: boolean;
 };
 }
 declare namespace App.Enums {
-export type TaskPriorityEnum = 'low' | 'medium' | 'high';
+export enum PermissionsEnum { calls_approve = 'calls.approve', tasks_index = 'tasks.index', tasks_edit = 'tasks.edit', tasks_complete = 'tasks.complete' };
+export enum RolesEnum { user = 'user', principal = 'principal', maintenance = 'maintenance', super_admin = 'super_admin' };
+export enum TaskPriorityEnum { low = 'low', medium = 'medium', high = 'high' };
 }

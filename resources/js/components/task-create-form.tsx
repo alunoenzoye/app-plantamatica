@@ -61,8 +61,8 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
             },
             onSuccess: () => {
                 setOpen(false);
-                form.reset();
                 router.reload();
+                form.reset();
             },
 
             onFinish: () => {
