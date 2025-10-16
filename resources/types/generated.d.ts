@@ -1,4 +1,10 @@
 declare namespace App.Data {
+export type CallData = {
+id: number;
+creator_id: number;
+name: string;
+description?: string;
+};
 export type TaskData = {
 id: number;
 creator_id: number;
