@@ -18,7 +18,6 @@ interface auth {
 
 export default function usePermission() {
     const page = usePage();
-    console.log(page.props.auth)
 
     const can = useMemo(function () {
         return function (permission: permissions) {
