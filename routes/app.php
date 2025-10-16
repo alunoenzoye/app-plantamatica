@@ -20,5 +20,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('tarefas/{task}/completar', [CompleteTaskController::class, 'complete'])->name('tasks.complete');
     });
 
-    Route::get('chamados', [CallController::class, 'index'])->name('chamados.index');
+    Route::get('chamados', [CallController::class, 'index'])->name('calls.index');
+    Route::post('chamados', [CallController::class, 'create'])->name('calls.create');
 });
