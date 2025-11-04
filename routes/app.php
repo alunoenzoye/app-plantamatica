@@ -2,10 +2,11 @@
 
 use App\Enums\PermissionsEnum;
 use App\Http\Controllers\app\TaskController;
-use App\Http\Controllers\CallController;
+use App\Http\Controllers\app\CompleteTaskController;
+use App\Http\Controllers\app\CallController;
+use App\Http\Controllers\app\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\CompleteTaskController;
 use Illuminate\Auth\Middleware\Authorize;
 
 Route::middleware('auth')->group(function () {
@@ -19,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => [Authorize::using(PermissionsEnum::tasks_complete->value)]], function () {
         Route::patch('tarefas/{task}/completar', [CompleteTaskController::class, 'complete'])->name('tasks.complete');
     });
+
+    Route::get('/user/{id}', [UserController::class, 'index'])->name('user.index');
 
     Route::get('chamados', [CallController::class, 'index'])->name('calls.index');
     Route::post('chamados', [CallController::class, 'create'])->name('calls.create');

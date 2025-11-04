@@ -2,9 +2,10 @@ import CallCreateForm from "@/components/call-create-form";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Head } from "@inertiajs/react";
-import { Separator } from "@radix-ui/react-separator";
+import { Separator } from '@/components/ui/separator';
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CallList from "@/components/call-list";
 
 interface callsProps {
     calls: App.Data.CallData[]
@@ -28,6 +29,7 @@ export default function Calls({ calls }: callsProps) {
                     </Button>
                 } />
                 <Separator className="mt-2 mb-2" />
+                <CallList calls={calls} />
             </div>
 
         </AppLayout>

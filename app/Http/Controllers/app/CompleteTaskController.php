@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\app;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\app\CompleteTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;

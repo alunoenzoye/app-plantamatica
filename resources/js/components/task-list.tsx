@@ -34,6 +34,7 @@ export default function TaskList({ tasks }: taskListProps) {
         const columns: ColumnDef<App.Data.TaskData>[] = [
             columnHelper.display({
                 id: "complete_checkbox",
+                size: 32,
                 cell: ((props) => {
                     const done = props.row.original.done;
 
@@ -93,8 +94,6 @@ export default function TaskList({ tasks }: taskListProps) {
     }, [taskData, setTaskData]);
 
     return (
-        <DataTable columns={columns} data={taskData} columnStyleArray={[
-            "w-8"
-        ]} />
+        <DataTable columns={columns} data={taskData} />
     )
 }

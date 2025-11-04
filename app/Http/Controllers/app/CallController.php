@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\app;
 
+use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use App\Http\Requests\CallRequest;
 use App\Models\Call;
@@ -10,7 +11,11 @@ use Auth;
 class CallController extends Controller
 {
     public function index() {
-        return Inertia::render('app/calls');
+        $calls = Call::all();
+
+        return Inertia::render('app/calls', [
+            'calls' => $calls
+        ]);
     }
 
     public function create(CallRequest $call) {
