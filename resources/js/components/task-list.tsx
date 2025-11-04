@@ -90,7 +90,7 @@ export default function TaskList({ tasks }: taskListProps) {
         ]
 
         return columns
-    }, []);
+    }, [taskData, setTaskData]);
 
     return (
         <DataTable columns={columns} data={taskData} columnStyleArray={[
