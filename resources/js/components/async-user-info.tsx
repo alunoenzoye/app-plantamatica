@@ -1,13 +1,11 @@
 import api from "@/services/api"
 import { User } from "@/types"
 import { useEffect, useState } from "react"
-import { UserInfo } from "./user-info"
 import { Loader2Icon } from "lucide-react"
 
 interface asyncUserInfoProps {
     userId: number
 }
-
 
 export default function AsyncUserInfo({ userId }: asyncUserInfoProps) {
     const [user, setUser] = useState<User | undefined>()
@@ -29,7 +27,7 @@ export default function AsyncUserInfo({ userId }: asyncUserInfoProps) {
         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm w-full">
             {
                 (user !== undefined) ? (
-                    <UserInfo user={user} showEmail={false} />
+                    user.name
                 ): (
                     <Loader2Icon className="animate-spin"/>
                 )
