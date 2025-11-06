@@ -25,4 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('chamados', [CallController::class, 'index'])->name('calls.index');
     Route::post('chamados', [CallController::class, 'create'])->name('calls.create');
+    Route::group(['middleware' => [Authorize::using(PermissionsEnum::calls_delete->value)]], function() {
+        Route::delete('chamados/{call}', [CallController::class, 'delete'])->name('calls.delete');
+    });
 });

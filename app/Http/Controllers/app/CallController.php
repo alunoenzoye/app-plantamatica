@@ -18,12 +18,18 @@ class CallController extends Controller
         ]);
     }
 
-    public function create(CallRequest $call) {
+    public function create(CallRequest $request) {
         Call::create([
             'creator_id' => Auth::id(),
-            'name' => $call->input('name'),
-            'description' => $call->input('description'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
         ]);
+
+        return redirect()->back();
+    }
+
+    public function delete(Call $call) {
+        $call->delete();
 
         return redirect()->back();
     }

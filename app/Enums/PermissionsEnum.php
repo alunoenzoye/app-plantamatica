@@ -5,6 +5,7 @@ namespace App\Enums;
 enum PermissionsEnum: string
 {
     case calls_approve = 'calls.approve';
+    case calls_delete = 'calls.delete';
 
     case tasks_index = 'tasks.index';
     case tasks_edit = 'tasks.edit';

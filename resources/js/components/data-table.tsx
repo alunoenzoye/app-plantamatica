@@ -27,12 +27,14 @@ import { DataTablePagination } from "./data-table-pagination"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    className: string,
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    className,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -72,7 +74,7 @@ export function DataTable<TData, TValue>({
                 className="max-w-sm"
             />
             <div className="overflow-hidden rounded-md border">
-                <Table>
+                <Table className={className}>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>

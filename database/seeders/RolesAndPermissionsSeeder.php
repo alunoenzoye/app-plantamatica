@@ -24,12 +24,14 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $maintenance_role = Role::create(['name' => RolesEnum::maintenance->value]);
         $maintenance_role->givePermissionTo(PermissionsEnum::calls_approve);
+        $maintenance_role->givePermissionTo(PermissionsEnum::calls_delete);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_index);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_edit);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_complete);
 
         $principal_role = Role::create(['name' => RolesEnum::principal->value]);
         $principal_role->givePermissionTo(PermissionsEnum::calls_approve);
+        $principal_role->givePermissionTo(PermissionsEnum::calls_delete);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_index);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_edit);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_complete);

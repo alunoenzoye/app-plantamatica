@@ -12,10 +12,11 @@ import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2Icon } from "lucide-react";
+import { CalendarIcon, Loader2Icon, Scroll } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { ReactNode, useRef, useState } from "react";
 import { ptBR } from "date-fns/locale";
+import { ScrollArea } from "./ui/scroll-area";
 
 type fields = keyof z.infer<typeof TaskRequest>
 
@@ -77,122 +78,124 @@ export default function TaskCreateForm({ openButton }: taskCreateFormProps) {
                 {openButton}
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Criar tarefa</DialogTitle>
-                    <DialogDescription>Insira as informações para criar uma tarefa</DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nome</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Nome da tarefa" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="flex gap-4">
+                <ScrollArea className="h-96">
+                    <DialogHeader>
+                        <DialogTitle>Criar tarefa</DialogTitle>
+                        <DialogDescription>Insira as informações para criar uma tarefa</DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                             <FormField
                                 control={form.control}
-                                name="priority"
+                                name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Prioridade</FormLabel>
+                                        <FormLabel>Nome</FormLabel>
                                         <FormControl>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Nenhuma" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectLabel>Proridade</SelectLabel>
-                                                        <SelectItem value="low">Baixo</SelectItem>
-                                                        <SelectItem value="medium">Médio</SelectItem>
-                                                        <SelectItem value="high">Alto</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
+                                            <Input placeholder="Nome da tarefa" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+                            <div className="flex gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="priority"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Prioridade</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Nenhuma" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectLabel>Proridade</SelectLabel>
+                                                            <SelectItem value="low">Baixo</SelectItem>
+                                                            <SelectItem value="medium">Médio</SelectItem>
+                                                            <SelectItem value="high">Alto</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="due_date"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-col">
+                                            <FormLabel>Prazo</FormLabel>
+                                            <Popover modal={true}>
+                                                <PopoverTrigger asChild>
+                                                    <FormControl>
+                                                        <Button
+                                                            variant={"outline"}
+                                                            className={cn(
+                                                                "w-[240px] pl-3 text-left font-normal",
+                                                                !field.value && "text-muted-foreground"
+                                                            )}
+                                                        >
+                                                            {field.value ? (
+                                                                format(field.value, "PPP", {
+                                                                    locale: ptBR
+                                                                })
+                                                            ) : (
+                                                                <span>Escolha o prazo</span>
+                                                            )}
+                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        </Button>
+                                                    </FormControl>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={field.value}
+                                                        onSelect={field.onChange}
+                                                        locale={ptBR}
+                                                        startMonth={dateAgo}
+                                                        endMonth={dateFuture}
+                                                        captionLayout="dropdown"
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 control={form.control}
-                                name="due_date"
+                                name="description"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-col">
-                                        <FormLabel>Prazo</FormLabel>
-                                        <Popover modal={true}>
-                                            <PopoverTrigger asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant={"outline"}
-                                                        className={cn(
-                                                            "w-[240px] pl-3 text-left font-normal",
-                                                            !field.value && "text-muted-foreground"
-                                                        )}
-                                                    >
-                                                        {field.value ? (
-                                                            format(field.value, "PPP", {
-                                                                locale: ptBR
-                                                            })
-                                                        ) : (
-                                                            <span>Escolha o prazo</span>
-                                                        )}
-                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0" align="start">
-                                                <Calendar
-                                                    mode="single"
-                                                    selected={field.value}
-                                                    onSelect={field.onChange}
-                                                    locale={ptBR}
-                                                    startMonth={dateAgo}
-                                                    endMonth={dateFuture}
-                                                    captionLayout="dropdown"
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
+                                    <FormItem>
+                                        <FormLabel>Descrição</FormLabel>
+                                        <FormControl>
+                                            <Textarea className="max-h-96 resize-none h-full" placeholder="Descrição da tarefa" {...field} />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                        </div>
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Descrição</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="Descrição da tarefa" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <DialogFooter className="mt-2">
-                            <DialogClose asChild>
-                                <Button variant="outline">Cancelar</Button>
-                            </DialogClose>
-                            <Button
-                                type="submit"
-                                disabled={sendingRequest}
-                            >
-                                {sendingRequest && <Loader2Icon className="animate-spin"/>}
-                                Enviar
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </Form>
+                            <DialogFooter className="mt-2">
+                                <DialogClose asChild>
+                                    <Button variant="outline">Cancelar</Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    disabled={sendingRequest}
+                                >
+                                    {sendingRequest && <Loader2Icon className="animate-spin" />}
+                                    Enviar
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </ScrollArea>
             </DialogContent>
         </Dialog>
     )
