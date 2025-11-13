@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\app;
+namespace App\Http\Requests\App;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,13 +27,6 @@ class TaskRequest extends FormRequest
             "due_date" => "date",
             "description" => "string|max:65535|nullable"
             //
-        ];
-    }
-
-    public function messages() {
-        return [
-            'name.required' => 'Campo nome vazio',
-            'priority.required' => 'Campo prioridade vazio',
         ];
     }
 }

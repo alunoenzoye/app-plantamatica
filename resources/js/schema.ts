@@ -20,3 +20,7 @@ export const TaskRequest = z.object({
 export const CompleteTaskRequest = z.object({
     done: z.boolean()
 });
+export const ApproveCallRequest = z.object({
+    priority: z.string(),
+    due_date: z.date().optional()
+});

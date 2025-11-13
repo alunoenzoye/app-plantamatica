@@ -8,10 +8,11 @@ import { router } from "@inertiajs/react";
 interface callInformationDialogProps {
     call: App.Data.CallData | undefined,
     open: boolean,
+    onManageClicked: () => void,
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export default function CallInformationDialog({ call, open, setOpen }: callInformationDialogProps) {
+export default function CallInformationDialog({ call, open, setOpen, onManageClicked }: callInformationDialogProps) {
     const { can } = usePermission()
 
     function onDelete() {
@@ -20,8 +21,8 @@ export default function CallInformationDialog({ call, open, setOpen }: callInfor
         }
 
         router.delete(route('calls.delete', call.id), {
-            onFinish: () => {
-                setOpen(false);
+            onSuccess: () => {
+                setOpen(false)
                 router.reload()
             }
         })
@@ -46,16 +47,18 @@ export default function CallInformationDialog({ call, open, setOpen }: callInfor
                     </div>
                 </div>
                 <DialogFooter>
-                    {can("calls.delete") &&
+                    {can("calls.delete") && (
                         <Button variant={"destructive"} onClick={onDelete}>
                             <LucideX />
                             Apagar
                         </Button>
-                    }
-                    <Button>
-                        <LucideGavel />
-                        Gerenciar
-                    </Button>
+                    )}
+                    {can("calls.manage") && (
+                        <Button onClick={onManageClicked}>
+                            <LucideGavel />
+                            Gerenciar
+                        </Button>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

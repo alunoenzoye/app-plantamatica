@@ -4,7 +4,7 @@ namespace App\Http\Requests\App;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CompleteTaskRequest extends FormRequest
+class ApproveCallRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,16 @@ class CompleteTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'done' => 'required|boolean'
+            "priority" => "required|in:low,medium,high",
+            "due_date" => "date",
             //
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'priority.required' => 'Campo prioridade vazio',
         ];
     }
 }

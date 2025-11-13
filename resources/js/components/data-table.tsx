@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
     return (
         <div className="flex flex-col gap-2">
             <Input
-                placeholder="Pesquisar tarefa"
+                placeholder="Pesquisar"
                 value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
                 onChange={(event) =>
                     table.getColumn("name")?.setFilterValue(event.target.value)
