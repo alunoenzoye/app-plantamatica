@@ -58,7 +58,13 @@ export default function CallCreateForm({ openButton }: callCreateFormProps) {
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(state) => {
+            if (!state) {
+                form.reset()
+            }
+
+            setOpen(state)
+        }}>
             <DialogTrigger asChild>
                 {openButton}
             </DialogTrigger>
@@ -103,7 +109,7 @@ export default function CallCreateForm({ openButton }: callCreateFormProps) {
                                 type="submit"
                                 disabled={sendingRequest}
                             >
-                                {sendingRequest && <Loader2Icon className="animate-spin"/>}
+                                {sendingRequest && <Loader2Icon className="animate-spin" />}
                                 Enviar
                             </Button>
                         </DialogFooter>
