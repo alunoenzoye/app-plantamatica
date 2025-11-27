@@ -42,7 +42,7 @@ export default function CallList({ calls: calls }: callListProps) {
             columnHelper.group({
                 id: "actions",
                 header: "",
-                cell: (({ row }) =>
+                cell: ({ row }) => (
                     <div className="flex gap-2 justify-end">
                         <Button
                             onClick={() => {
@@ -86,13 +86,7 @@ export default function CallList({ calls: calls }: callListProps) {
             <CallManageDialog
                 call={selectedCall}
                 open={callManageDialogOpen}
-                setOpen={(state) => {
-                    if (!state) {
-                        setCallInformationDialogOpen(false)
-                    }
-
-                    setCallManageDialogOpen(state)
-                }}
+                setOpen={setCallManageDialogOpen}
             />
             <DataTable columns={columns} data={calls} className={"table-fixed"} />
         </>
