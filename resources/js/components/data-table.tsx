@@ -3,6 +3,8 @@
 import {
     ColumnDef,
     ColumnFiltersState,
+    FilterFn,
+    FilterFnOption,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -29,14 +31,16 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     className: string,
+    initialSort: SortingState | undefined,
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     className,
+    initialSort = [],
 }: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [sorting, setSorting] = React.useState<SortingState>(initialSort)
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
