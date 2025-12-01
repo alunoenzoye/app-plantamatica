@@ -5,6 +5,7 @@ use App\Http\Controllers\app\ApproveCallController;
 use App\Http\Controllers\app\TaskController;
 use App\Http\Controllers\app\CompleteTaskController;
 use App\Http\Controllers\app\CallController;
+use App\Http\Controllers\app\MapController;
 use App\Http\Controllers\app\RefuseCallController;
 use App\Http\Controllers\app\UserController;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,6 @@ Route::middleware('auth')->group(function () {
         Route::post('chamados/{call}/approve', [ApproveCallController::class, 'approve'])->name('calls.approve');
         Route::post('chamados/{call}/refuse', [RefuseCallController::class, 'refuse'])->name('calls.refuse');
     });
+
+    Route::get('planta', [MapController::class, 'index'])->name('map.index');
 });
