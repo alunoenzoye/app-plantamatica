@@ -24,9 +24,9 @@ class CallRequest extends FormRequest
         return [
             "name" => "required|string|max:255",
             "description" => "string|max:65535|nullable",
-            "position" => "sometimes|nullable|array",
-            "position.x" => "numeric:strict|min:0|required",
-            "position.y" => "numeric:strict|min:0|required",
+            "position" => "sometimes|array",
+            "position.x" => "required_with:numeric:strict|min:0",
+            "position.y" => "required_with:numeric:strict|min:0",
         ];
     }
 

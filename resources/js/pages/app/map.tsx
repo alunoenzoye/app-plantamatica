@@ -4,7 +4,14 @@ import { Head } from "@inertiajs/react";
 import { Separator } from '@/components/ui/separator';
 import BlueprintMap from "@/components/blueprint-map";
 
-export default function Calls() {
+interface callsProps {
+    calls: App.Data.CallData[],
+    tasks: App.Data.TaskData[],
+}
+
+export default function Calls({ calls, tasks }: callsProps) {
+    console.log(calls)
+    console.log(tasks)
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Planta',
@@ -16,7 +23,10 @@ export default function Calls() {
         <>
             <AppLayout breadcrumbs={breadcrumbs} floatingSidebar={true} className="!bg-none">
                 <Head title="Planta" />
-                <BlueprintMap />
+                <BlueprintMap
+                    tasks={tasks}
+                    calls={calls}
+                />
             </AppLayout>
         </>
     )

@@ -46,8 +46,8 @@ export default function TaskList({ tasks }: taskListProps) {
 
     const columns = useMemo(() => {
         const columns = [
-            columnHelper.display({
-                id: "complete_checkbox",
+            columnHelper.accessor("done", {
+                header: "",
                 size: 32,
                 cell: ((props) => {
                     const done = props.row.original.done;

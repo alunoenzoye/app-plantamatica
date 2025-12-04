@@ -43,6 +43,7 @@ export default function MapCallCreateForm({ open, setOpen, callCoordinates }: ca
 
         router.post(route('calls.create'), values, {
             onError: (error) => {
+                console.log(error)
                 for (const [field, message] of Object.entries(error)) {
                     form.setError(field as fields, {
                         type: "custom",

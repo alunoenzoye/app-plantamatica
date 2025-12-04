@@ -1,10 +1,11 @@
 import { TransformComponent, TransformWrapper, useControls } from "react-zoom-pan-pinch"
 import TestMap from "../../assets/test-map.jpg"
 import { Button } from "./ui/button"
-import { LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
-import { RefObject, useEffect, useRef, useState } from "react"
+import { LucidePin, LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
+import React, { HtmlHTMLAttributes, RefObject, useEffect, useMemo, useRef, useState } from "react"
 import CallCreateForm from "./call-create-form"
 import MapCallCreateForm from "./map-call-create-form"
+import getPriorityStyle from "@/utils/getPriorityStyle"
 
 interface coordinates {
     x: number,
@@ -23,11 +24,8 @@ function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: l
     const locationPickerYRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        const map = mapRef.current
-        const wrapper = wrapperRef.current
-        if (map === null || wrapper === null) {
-            return
-        }
+        const map = mapRef.current as HTMLDivElement
+        const wrapper = wrapperRef.current as HTMLDivElement
 
         const enterListener = () => {
             setHoveringMap(true)
@@ -52,8 +50,10 @@ function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: l
             mouseEvent.stopPropagation()
 
             const rect = map.getBoundingClientRect()
-            const x = mouseEvent.clientX - rect.left
-            const y = mouseEvent.clientY - rect.top
+            const x = (mouseEvent.clientX - rect.left) / rect.width
+            const y = (mouseEvent.clientY - rect.top) / rect.height
+
+            console.log(`x: ${x}, y: ${y}`)
 
             onLocationPicked({
                 x: x,
@@ -72,7 +72,7 @@ function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: l
             map.removeEventListener("mouseleave", enterListener)
             map.removeEventListener("click", mapClickListener)
         }
-    }, [mapRef, wrapperRef, onCancelled, onLocationPicked])
+    }, [onCancelled, onLocationPicked])
 
     return (
         (hoveringMap && (
@@ -177,9 +177,104 @@ function ZoomControls() {
     )
 }
 
-export default function BlueprintMap() {
+interface markerProps {
+    xPosition: number,
+    yPosition: number,
+    children: React.ReactNode,
+}
+
+function Marker({ children, xPosition, yPosition }: markerProps) {
+
+    return (
+        <div
+            style={{
+                position: "absolute",
+                top: `${yPosition * 100}%`,
+                left: `${xPosition * 100}%`,
+            }}
+        >
+            {children}
+        </div>
+    )
+}
+
+interface callMarkerProps {
+    data: App.Data.CallData,
+}
+
+function CallMarker({ data }: callMarkerProps) {
+    if (data.position === undefined) {
+        return
+    }
+
+    return (
+        <Marker
+            xPosition={data.position.x}
+            yPosition={data.position.y}
+        >
+            <div className="flex flex-col justify-center items-center">
+                <LucidePin />
+                <span className="text-sm">{data.name}</span>
+            </div>
+        </Marker>
+    )
+}
+
+interface taskMarkerProps {
+    data: App.Data.TaskData,
+}
+
+function TaskMarker({ data }: taskMarkerProps) {
+    if (data.position === undefined) {
+        return
+    }
+
+    return (
+        <Marker
+            xPosition={data.position.x}
+            yPosition={data.position.y}
+        >
+            <div className="flex flex-col justify-center items-center accent-red-600">
+                <LucidePin
+                    color={getPriorityStyle(data.priority).color}
+                />
+                <span>{data.name}</span>
+            </div>
+        </Marker>
+    )
+}
+
+interface blueprintMapProps {
+    calls: App.Data.CallData[],
+    tasks: App.Data.TaskData[],
+}
+
+export default function BlueprintMap({ calls, tasks }: blueprintMapProps) {
     const mapRef = useRef<HTMLDivElement | null>(null)
     const wrapperRef = useRef<HTMLDivElement | null>(null)
+
+    const markers = useMemo(() => {
+        return (
+            <>
+                {
+                    calls.map(call => (
+                        <CallMarker
+                            data={call}
+                            key={`call-${call.id}`}
+                        />
+                    ))
+                }
+                {
+                    tasks.map(task => (
+                        <TaskMarker
+                            data={task}
+                            key={`task-${task.id}`}
+                        />
+                    ))
+                }
+            </>
+        )
+    }, [calls, tasks])
 
     return (
         <div className="relative w-full h-full" ref={wrapperRef}>
@@ -198,7 +293,8 @@ export default function BlueprintMap() {
                             height: "100%",
                         }}
                     >
-                        <div ref={mapRef}>
+                        <div ref={mapRef} className="relative transform translate-0">
+                            {markers}
                             <img
                                 className="block w-full"
                                 src={TestMap}

@@ -17,6 +17,7 @@ name: string;
 priority: App.Enums.TaskPriorityEnum;
 due_date?: string;
 description?: string;
+position?: App.Data.PositionData;
 done: boolean;
 };
 }

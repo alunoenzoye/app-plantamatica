@@ -19,8 +19,8 @@ class PositionDataNormalizer implements Normalizer
 
         $coordinates = $value->getCoordinates();
         return new PositionData(
-            $coordinates[0],
             $coordinates[1],
+            $coordinates[0],
         )->toArray();
     }
 }
