@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class Call extends Model
 {
@@ -11,5 +12,9 @@ class Call extends Model
         'name',
         'description',
         'position'
+    ];
+
+    protected $casts = [
+        'position' => Point::class,
     ];
 }

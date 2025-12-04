@@ -4,6 +4,11 @@ id: number;
 creator_id: number;
 name: string;
 description?: string;
+position?: App.Data.PositionData;
+};
+export type PositionData = {
+x: number;
+y: number;
 };
 export type TaskData = {
 id: number;
@@ -16,7 +21,7 @@ done: boolean;
 };
 }
 declare namespace App.Enums {
-export enum PermissionsEnum { calls_manage = 'calls.manage', calls_delete = 'calls.delete', tasks_index = 'tasks.index', tasks_edit = 'tasks.edit', tasks_complete = 'tasks.complete' };
+export enum PermissionsEnum { calls_manage = 'calls.manage', calls_approve = 'calls.approve', calls_delete = 'calls.delete', tasks_index = 'tasks.index', tasks_edit = 'tasks.edit', tasks_complete = 'tasks.complete' };
 export enum RolesEnum { user = 'user', principal = 'principal', maintenance = 'maintenance', super_admin = 'super_admin' };
 export enum TaskPriorityEnum { low = 'low', medium = 'medium', high = 'high' };
 }

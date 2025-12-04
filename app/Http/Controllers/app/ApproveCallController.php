@@ -21,6 +21,7 @@ class ApproveCallController extends Controller
                 'name' => $call->name,
                 'priority' => $request->input('priority'),
                 'due_date' => $request->input('due_date'),
+                'position' => $call->position,
                 'description' => $request->input('description'),
             ]);
 

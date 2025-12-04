@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 /**
  * @property int $id
@@ -36,13 +37,15 @@ class Task extends Model
         'priority',
         'due_date',
         'description',
+        'position',
         'done'
     ];
 
     protected function casts(): array {
         return [
             'due_date' => 'date',
-            'done' => 'boolean'
+            'done' => 'boolean',
+            'position' => Point::class,
         ];
     }
     //

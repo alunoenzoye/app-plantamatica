@@ -22,6 +22,7 @@ class TaskData extends Data
         public TaskPriorityEnum $priority,
         public Optional|CarbonImmutable $due_date,
         public Optional|string $description,
+        public Optional|PositionData $position,
         public bool $done
     ) {}
 }

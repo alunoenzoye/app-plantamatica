@@ -17,13 +17,16 @@ class CallRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\Validatio ffnRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             "name" => "required|string|max:255",
-            "description" => "string|max:65535|nullable"
+            "description" => "string|max:65535|nullable",
+            "position" => "sometimes|nullable|array",
+            "position.x" => "numeric:strict|min:0|required",
+            "position.y" => "numeric:strict|min:0|required",
         ];
     }
 

@@ -1,7 +1,11 @@
 import { z } from "zod";
 export const CallRequest = z.object({
     name: z.string().max(255),
-    description: z.string().max(65535).nullable().optional()
+    description: z.string().max(65535).nullable().optional(),
+    position: z.object({
+        x: z.number().min(0),
+        y: z.number().min(0)
+    }).optional(),
 });
 export const ProfileUpdateRequest = z.object({
     name: z.string().max(255),
