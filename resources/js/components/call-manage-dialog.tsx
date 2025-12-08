@@ -96,6 +96,7 @@ export function CallManageDialog({ call, open, setOpen }: callManageDialogProps)
         <Dialog open={open} onOpenChange={(state) => {
             if (!state) {
                 form.reset()
+                console.log(" r we trolling chat")
             }
 
             setOpen(state)

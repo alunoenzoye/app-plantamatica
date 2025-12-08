@@ -1,11 +1,11 @@
-import { TransformComponent, TransformWrapper, useControls } from "react-zoom-pan-pinch"
+import { TransformComponent, TransformWrapper, useControls, useTransformComponent, useTransformContext } from "react-zoom-pan-pinch"
 import TestMap from "../../assets/test-map.jpg"
 import { Button } from "./ui/button"
-import { LucidePin, LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
-import React, { HtmlHTMLAttributes, RefObject, useEffect, useMemo, useRef, useState } from "react"
-import CallCreateForm from "./call-create-form"
+import { Compass, ListFilter, LucideMap, LucideMapPin, LucideMegaphone, LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
+import React, { RefObject, SetStateAction, useEffect, useRef, useState } from "react"
 import MapCallCreateForm from "./map-call-create-form"
 import getPriorityStyle from "@/utils/getPriorityStyle"
+import { Select, SelectItem, SelectTrigger, SelectContent, SelectGroup, SelectLabel, SelectValue } from "./ui/select"
 
 interface coordinates {
     x: number,
@@ -18,7 +18,7 @@ interface locationPickerProps {
     onLocationPicked: (coordinates: coordinates) => void,
 }
 
-function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: locationPickerProps) {
+function LocationPicker({ mapRef, wrapperRef, onLocationPicked }: locationPickerProps) {
     const [hoveringMap, setHoveringMap] = useState(false)
     const locationPickerXRef = useRef<HTMLDivElement | null>(null)
     const locationPickerYRef = useRef<HTMLDivElement | null>(null)
@@ -53,8 +53,6 @@ function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: l
             const x = (mouseEvent.clientX - rect.left) / rect.width
             const y = (mouseEvent.clientY - rect.top) / rect.height
 
-            console.log(`x: ${x}, y: ${y}`)
-
             onLocationPicked({
                 x: x,
                 y: y,
@@ -72,7 +70,7 @@ function LocationPicker({ mapRef, wrapperRef, onLocationPicked, onCancelled }: l
             map.removeEventListener("mouseleave", enterListener)
             map.removeEventListener("click", mapClickListener)
         }
-    }, [onCancelled, onLocationPicked])
+    }, [onLocationPicked, mapRef, wrapperRef])
 
     return (
         (hoveringMap && (
@@ -116,13 +114,16 @@ function CallCreatorButton({ state, onClick }: callCreatorButtonProps) {
     )
 }
 
+type creationState = "none" | "pickingLocation" | "pickedLocation"
+
 interface callCreatorProps {
     mapRef: RefObject<HTMLDivElement | null>,
     wrapperRef: RefObject<HTMLDivElement | null>,
+    creationState: creationState,
+    setCreationState: React.Dispatch<React.SetStateAction<creationState>>,
 }
 
-function CallCreator({ mapRef, wrapperRef }: callCreatorProps) {
-    const [creationState, setCreationState] = useState<"none" | "pickingLocation" | "pickedLocation">("none")
+function CallCreator({ mapRef, wrapperRef, creationState, setCreationState }: callCreatorProps) {
     const [callCoordinates, setCallCoordinates] = useState<coordinates | undefined>(undefined)
 
     return (
@@ -161,36 +162,55 @@ function CallCreator({ mapRef, wrapperRef }: callCreatorProps) {
     )
 }
 
-function ZoomControls() {
-    const { zoomIn, zoomOut } = useControls()
+function MapNavigationControls() {
+    const { zoomIn, zoomOut, resetTransform, centerView } = useControls()
 
-    return (
-        <div className="absolute flex flex-col gap-2.5 right-4 bottom-4 z-10">
-            <Button variant={"outline"} size={"lg"} onClick={() => zoomIn()}>
-                <LucideZoomIn />
-            </Button>
-            <Button variant={"outline"} size={"lg"} onClick={() => zoomOut()}>
-                <LucideZoomOut />
-            </Button>
-        </div>
+    useEffect(() => {
+        centerView(0)
+    }, [])
 
-    )
+    const transformedComponent = useTransformComponent(({ state }) => {
+
+        return (
+            <div className="absolute flex flex-col gap-2.5 right-4 bottom-4 z-10">
+                <div className="border border-input rounded-md border-ring bg-background shadow-xs p-2">
+                    <span className="text-sm text-center block w-full">{state.scale.toFixed(1)}x</span>
+                </div>
+                <Button variant={"outline"} size={"lg"} onClick={() => {
+                    resetTransform()
+                    centerView()
+                }}>
+                    <Compass />
+                </Button>
+                <Button variant={"outline"} size={"lg"} onClick={() => zoomIn()}>
+                    <LucideZoomIn />
+                </Button>
+                <Button variant={"outline"} size={"lg"} onClick={() => zoomOut()}>
+                    <LucideZoomOut />
+                </Button>
+            </div>
+        )
+    })
+
+    return transformedComponent
 }
 
 interface markerProps {
     xPosition: number,
     yPosition: number,
+    onClick?: () => void,
     children: React.ReactNode,
 }
 
-function Marker({ children, xPosition, yPosition }: markerProps) {
-
+function Marker({ children, xPosition, yPosition, onClick }: markerProps) {
     return (
         <div
+            onClick={onClick}
             style={{
                 position: "absolute",
                 top: `${yPosition * 100}%`,
                 left: `${xPosition * 100}%`,
+                transform: "translateX(-50%) translateY(-50%)"
             }}
         >
             {children}
@@ -200,21 +220,28 @@ function Marker({ children, xPosition, yPosition }: markerProps) {
 
 interface callMarkerProps {
     data: App.Data.CallData,
+    visible?: boolean,
+    onClick?: () => void,
 }
 
-function CallMarker({ data }: callMarkerProps) {
+function CallMarker({ data, onClick, visible }: callMarkerProps) {
     if (data.position === undefined) {
+        return
+    }
+
+    if (visible === false) {
         return
     }
 
     return (
         <Marker
+            onClick={onClick}
             xPosition={data.position.x}
             yPosition={data.position.y}
         >
-            <div className="flex flex-col justify-center items-center">
-                <LucidePin />
-                <span className="text-sm">{data.name}</span>
+            <div className="hover:cursor-pointer flex flex-col justify-center items-center">
+                <LucideMegaphone stroke="#000" fill="#fff" />
+                <span className="text-sm text-black">{data.name}</span>
             </div>
         </Marker>
     )
@@ -222,83 +249,140 @@ function CallMarker({ data }: callMarkerProps) {
 
 interface taskMarkerProps {
     data: App.Data.TaskData,
+    visible?: boolean,
+    onClick?: () => void,
 }
 
-function TaskMarker({ data }: taskMarkerProps) {
+function TaskMarker({ data, onClick, visible }: taskMarkerProps) {
     if (data.position === undefined) {
+        return
+    }
+
+    if (visible === false) {
         return
     }
 
     return (
         <Marker
+            onClick={onClick}
             xPosition={data.position.x}
             yPosition={data.position.y}
         >
-            <div className="flex flex-col justify-center items-center accent-red-600">
-                <LucidePin
-                    color={getPriorityStyle(data.priority).color}
+            <div className="hover:cursor-pointer flex flex-col justify-center items-center accent-red-600">
+                <LucideMapPin
+                    stroke="#000"
+                    fill={getPriorityStyle(data.priority).color}
                 />
-                <span>{data.name}</span>
+                <span className="text-sm text-black">{data.name}</span>
             </div>
         </Marker>
+    )
+}
+
+type mapFilter = "all" | "tasks" | "calls"
+
+interface mapFilterProps {
+    filter: mapFilter,
+    setFilter: React.Dispatch<SetStateAction<mapFilter>>,
+}
+
+function MapFilter({ filter, setFilter }: mapFilterProps) {
+    return (
+        <div className="absolute top-4 left-4 z-10">
+            <Select
+                value={filter}
+                onValueChange={(value) => setFilter(value as mapFilter)}
+            >
+                <SelectTrigger className="flex gap-2 p-2 w-36 bg-background">
+                    <ListFilter />
+                    <SelectValue placeholder="Tudo" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectLabel>Filtros</SelectLabel>
+                        <SelectItem value="all">Nenhum</SelectItem>
+                        <SelectItem value="tasks">Tarefas</SelectItem>
+                        <SelectItem value="calls">Chamados</SelectItem>
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+        </div>
     )
 }
 
 interface blueprintMapProps {
     calls: App.Data.CallData[],
     tasks: App.Data.TaskData[],
+    onCallSelected: (call: App.Data.CallData) => void,
+    onTaskSelected: (task: App.Data.TaskData) => void,
 }
 
-export default function BlueprintMap({ calls, tasks }: blueprintMapProps) {
+export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelected }: blueprintMapProps) {
     const mapRef = useRef<HTMLDivElement | null>(null)
     const wrapperRef = useRef<HTMLDivElement | null>(null)
-
-    const markers = useMemo(() => {
-        return (
-            <>
-                {
-                    calls.map(call => (
-                        <CallMarker
-                            data={call}
-                            key={`call-${call.id}`}
-                        />
-                    ))
-                }
-                {
-                    tasks.map(task => (
-                        <TaskMarker
-                            data={task}
-                            key={`task-${task.id}`}
-                        />
-                    ))
-                }
-            </>
-        )
-    }, [calls, tasks])
+    const [creationState, setCreationState] = useState<creationState>("none")
+    const [filter, setFilter] = useState<mapFilter>("all")
 
     return (
         <div className="relative w-full h-full" ref={wrapperRef}>
             <CallCreator
+                creationState={creationState}
+                setCreationState={setCreationState}
                 mapRef={mapRef}
                 wrapperRef={wrapperRef}
             />
             <TransformWrapper
                 centerOnInit={true}
+                minScale={0.5}
+                limitToBounds={false}
             >
                 <>
-                    <ZoomControls />
+                    <MapFilter
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
+                    <MapNavigationControls />
                     <TransformComponent
                         wrapperStyle={{
                             width: "100%",
                             height: "100%",
                         }}
                     >
-                        <div ref={mapRef} className="relative transform translate-0">
-                            {markers}
-                            <img
-                                className="block w-full"
-                                src={TestMap}
-                            />
+                        <div className="border-black border-1 relative transform translate-0">
+                            <>
+                                {
+                                    calls.map(call => (
+                                        <CallMarker
+                                            onClick={() => {
+                                                onCallSelected(call)
+                                            }}
+                                            data={call}
+                                            key={`call-${call.id}`}
+                                            visible={creationState !== "pickingLocation"
+                                                && (filter === "all" || filter === "calls")}
+                                        />
+                                    ))
+                                }
+                                {
+                                    tasks.map(task => (
+                                        <TaskMarker
+                                            onClick={() => {
+                                                onTaskSelected(task)
+                                            }}
+                                            data={task}
+                                            key={`task-${task.id}`}
+                                            visible={creationState !== "pickingLocation"
+                                                && (filter === "all" || filter === "tasks")}
+                                        />
+                                    ))
+                                }
+                            </>
+                            <div ref={mapRef}>
+                                <img
+                                    className="block w-full"
+                                    src={TestMap}
+                                />
+                            </div>
                         </div>
                     </TransformComponent>
                 </>
