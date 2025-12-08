@@ -1,7 +1,7 @@
-import { TransformComponent, TransformWrapper, useControls, useTransformComponent, useTransformContext } from "react-zoom-pan-pinch"
+import { TransformComponent, TransformWrapper, useControls, useTransformComponent } from "react-zoom-pan-pinch"
 import TestMap from "../../assets/test-map.jpg"
 import { Button } from "./ui/button"
-import { Compass, ListFilter, LucideMap, LucideMapPin, LucideMegaphone, LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
+import { Compass, ListFilter, LucideMapPin, LucideMegaphone, LucidePlus, LucideX, LucideZoomIn, LucideZoomOut } from "lucide-react"
 import React, { RefObject, SetStateAction, useEffect, useRef, useState } from "react"
 import MapCallCreateForm from "./map-call-create-form"
 import getPriorityStyle from "@/utils/getPriorityStyle"
@@ -163,10 +163,12 @@ function CallCreator({ mapRef, wrapperRef, creationState, setCreationState }: ca
 }
 
 function MapNavigationControls() {
-    const { zoomIn, zoomOut, resetTransform, centerView } = useControls()
+    const { zoomIn, zoomOut, centerView } = useControls()
 
     useEffect(() => {
-        centerView(0)
+        setTimeout(() => {
+            centerView(0, 0)
+        }, 10)
     }, [])
 
     const transformedComponent = useTransformComponent(({ state }) => {
@@ -177,8 +179,7 @@ function MapNavigationControls() {
                     <span className="text-sm text-center block w-full">{state.scale.toFixed(1)}x</span>
                 </div>
                 <Button variant={"outline"} size={"lg"} onClick={() => {
-                    resetTransform()
-                    centerView()
+                    centerView(1)
                 }}>
                     <Compass />
                 </Button>
