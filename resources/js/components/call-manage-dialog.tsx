@@ -52,6 +52,7 @@ export function CallManageDialog({ call, open, setOpen }: callManageDialogProps)
                         router.reload()
                     },
                     onFinish: () => {
+                        form.reset()
                         setRefuseRequestProcessing(false)
                     }
                 })
@@ -83,6 +84,7 @@ export function CallManageDialog({ call, open, setOpen }: callManageDialogProps)
                         router.reload()
                     },
                     onFinish: () => {
+                        form.reset()
                         setApproveRequestProcessing(false)
                     }
                 })
