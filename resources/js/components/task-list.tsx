@@ -116,7 +116,21 @@ export default function TaskList({ tasks }: taskListProps) {
                         >
                             <LucideExternalLink />
                         </Button>
-                        <Button variant="outline" size="icon" disabled={(row.original.position === null || row.original.position === undefined)}>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            disabled={(row.original.position === null || row.original.position === undefined || row.original.done)}
+                            onClick={() => {
+                                console.log(row.original.position)
+                                router.visit(route("map.index"), {
+                                    method: 'get',
+                                    data: {
+                                        "go_to": row.original.id,
+                                        "go_to_category": 'task'
+                                    }
+                                })
+                            }}
+                        >
                             <LucideMapPinned />
                         </Button>
                     </div >

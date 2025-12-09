@@ -168,7 +168,7 @@ function MapNavigationControls() {
     useEffect(() => {
         setTimeout(() => {
             centerView(0, 0)
-        }, 10)
+        }, 100)
     }, [])
 
     const transformedComponent = useTransformComponent(({ state }) => {
@@ -226,6 +226,22 @@ interface callMarkerProps {
 }
 
 function CallMarker({ data, onClick, visible }: callMarkerProps) {
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const goToId = params.get("go_to")
+        const goToCategory = params.get("go_to_category")
+
+        if (goToCategory === "call" || goToId !== null) {
+            if (Number(goToId) !== data.id) {
+                return
+            }
+
+            if (onClick !== undefined) {
+                onClick()
+            }
+        }
+    }, [])
+
     if (data.position === undefined) {
         return
     }
@@ -255,6 +271,22 @@ interface taskMarkerProps {
 }
 
 function TaskMarker({ data, onClick, visible }: taskMarkerProps) {
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const goToId = params.get("go_to")
+        const goToCategory = params.get("go_to_category")
+
+        if (goToCategory === "task" || goToId !== null) {
+            if (Number(goToId) !== data.id) {
+                return
+            }
+
+            if (onClick !== undefined) {
+                onClick()
+            }
+        }
+    }, [])
+
     if (data.position === undefined) {
         return
     }
@@ -338,11 +370,6 @@ export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelec
                 limitToBounds={false}
             >
                 <>
-                    <MapFilter
-                        filter={filter}
-                        setFilter={setFilter}
-                    />
-                    <MapNavigationControls />
                     <TransformComponent
                         wrapperStyle={{
                             width: "100%",
@@ -386,6 +413,11 @@ export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelec
                             </div>
                         </div>
                     </TransformComponent>
+                    <MapFilter
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
+                    <MapNavigationControls />
                 </>
             </TransformWrapper>
         </div>

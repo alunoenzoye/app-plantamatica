@@ -15,8 +15,7 @@ class ApproveCallController extends Controller
         try {
             DB::beginTransaction();
 
-            $call->deleteOrFail();
-            Task::create([
+            $task = Task::create([
                 'creator_id' => $call->creator_id,
                 'name' => $call->name,
                 'priority' => $request->input('priority'),
@@ -24,6 +23,12 @@ class ApproveCallController extends Controller
                 'position' => $call->position,
                 'description' => $request->input('description'),
             ]);
+
+            $call_images = $call->getMedia('images');
+            foreach ($call_images as $image) {
+                $image->move($task, 'images');
+            }
+            $call->deleteOrFail();
 
             DB::commit();
         } catch (\Exception $e) {

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * @property int $id
@@ -29,8 +31,10 @@ use MatanYadaev\EloquentSpatial\Objects\Point;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Task extends Model
+class Task extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
         'creator_id',
         'name',

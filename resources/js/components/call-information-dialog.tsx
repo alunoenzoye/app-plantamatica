@@ -1,9 +1,11 @@
-import { LucideGavel, LucideX } from "lucide-react";
+import { LucideGavel, LucideX, Paperclip } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 import usePermission from "@/hooks/use-permission";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
+import { Badge } from "./ui/badge";
+import LinkedImageList from "./linked-image-list";
 
 interface callInformationDialogProps {
     call: App.Data.CallData | undefined,
@@ -14,6 +16,7 @@ interface callInformationDialogProps {
 
 export default function CallInformationDialog({ call, open, setOpen, onManageClicked }: callInformationDialogProps) {
     const { can } = usePermission()
+    const { url } = usePage();
 
     function onDelete() {
         if (call === undefined) {
@@ -45,6 +48,26 @@ export default function CallInformationDialog({ call, open, setOpen, onManageCli
                             }</p>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <h2 className="font-bold">Anexos</h2>
+                    <LinkedImageList
+                        images={call?.images}
+                        onAddImages={(imageList) => {
+                            if (call === undefined) {
+                                return;
+                            }
+
+                            router.post(route("calls.add-image", call?.id), {
+                                image: imageList[0],
+                            }, {
+                                onSuccess: () => {
+                                    router.reload()
+                                    setOpen(false)
+                                }
+                            })
+                        }}
+                    />
                 </div>
                 <DialogFooter>
                     {can("calls.delete") && (

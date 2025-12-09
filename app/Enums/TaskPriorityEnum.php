@@ -3,14 +3,11 @@
 namespace App\Enums;
 
 use Spatie\Enum\Laravel\Enum;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
-/**
-*@var string se
-*
-*
-*
-*/
-enum TaskPriorityEnum: string {
+#[TypeScript]
+enum TaskPriorityEnum: string
+{
     case low = "low";
     case medium = "medium";
     case high = "high";

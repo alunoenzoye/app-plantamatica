@@ -27,6 +27,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $maintenance_role->givePermissionTo(PermissionsEnum::calls_delete);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_index);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_edit);
+        $maintenance_role->givePermissionTo(PermissionsEnum::media_add);
+        $maintenance_role->givePermissionTo(PermissionsEnum::media_delete);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_complete);
 
         $principal_role = Role::create(['name' => RolesEnum::principal->value]);
@@ -34,6 +36,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $principal_role->givePermissionTo(PermissionsEnum::calls_delete);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_index);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_edit);
+        $principal_role->givePermissionTo(PermissionsEnum::media_add);
+        $principal_role->givePermissionTo(PermissionsEnum::media_delete);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_complete);
 
         $super_admin_role = Role::create(['name' => RolesEnum::super_admin->value]);

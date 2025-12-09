@@ -3,10 +3,11 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 import usePermission from "@/hooks/use-permission";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Badge } from "./ui/badge";
 import getPriorityStyle from "@/utils/getPriorityStyle";
 import { formatDate } from "date-fns";
+import LinkedImageList from "./linked-image-list";
 
 interface callInformationDialogProps {
     task: App.Data.TaskData | undefined,
@@ -17,6 +18,7 @@ interface callInformationDialogProps {
 
 export default function TaskInformationDialog({ task, open, setOpen, onTaskComplete }: callInformationDialogProps) {
     const { can } = usePermission()
+    const { url } = usePage()
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -55,6 +57,26 @@ export default function TaskInformationDialog({ task, open, setOpen, onTaskCompl
                                 (task?.description) ? task.description : "Descrição vazia."
                             }</p>
                         </div>
+                    </div>
+                    <div>
+                        <h2 className="font-bold">Anexos</h2>
+                        <LinkedImageList
+                            images={task?.images}
+                            onAddImages={(imageList) => {
+                                if (task === undefined) {
+                                    return;
+                                }
+
+                                router.post(route("tasks.add-image", task?.id), {
+                                    image: imageList[0],
+                                }, {
+                                    onSuccess: () => {
+                                        router.reload()
+                                        setOpen(false)
+                                    }
+                                })
+                            }}
+                        />
                     </div>
                 </div>
                 <DialogFooter>

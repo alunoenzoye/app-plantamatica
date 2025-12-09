@@ -36,7 +36,7 @@ export default function Register() {
             <Head title="Cadastrar" />
 
             <div className="w-full max-w-sm flex flex-col gap-16">
-                <h1 className="font-extrabold text-center text-4xl">Entrar</h1>
+                <h1 className="font-extrabold text-center text-4xl">Cadastrar</h1>
                 <form className="flex flex-col gap-6" onSubmit={submit}>
                     <div className="grid gap-6">
                         <div className="grid gap-2">

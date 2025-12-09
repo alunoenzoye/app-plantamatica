@@ -11,6 +11,7 @@ use App\Http\Controllers\app\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Auth\Middleware\Authorize;
+use App\Http\Controllers\app\DeleteMediaController;
 
 Route::middleware('auth')->group(function () {
     Route::get('painel', function () {
@@ -25,6 +26,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/user/{id}', [UserController::class, 'index'])->name('user.index');
+
+    Route::group(['middleware' => [Authorize::using(PermissionsEnum::media_add->value)]], function () {
+        Route::post('chamados/{call}/add-attachment', [CallController::class, 'add_image'])->name('calls.add-image');
+        Route::post('tarefas/{task}/add-attachment', [TaskController::class, 'add_image'])->name('tasks.add-image');
+    });
+    Route::group(['middleware' => [Authorize::using(PermissionsEnum::media_delete->value)]], function () {
+        Route::post('/media/delete', [DeleteMediaController::class, 'delete'])->name('media.delete');
+    });
 
     Route::get('chamados', [CallController::class, 'index'])->name('calls.index');
     Route::post('chamados', [CallController::class, 'create'])->name('calls.create');

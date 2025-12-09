@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\app;
 
+use App\Data\TaskData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\App\AddMediaRequest;
 use App\Http\Requests\app\TaskRequest as AppTaskRequest;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +14,7 @@ class TaskController extends Controller
 {
     //
     public function index() {
-        $tasks = Task::all();
+        $tasks = TaskData::collect(Task::all());
 
         return Inertia::render('app/tasks', [
             'tasks' => $tasks
@@ -20,8 +22,6 @@ class TaskController extends Controller
     }
 
     public function create(AppTaskRequest $task) {
-        // dd($task);
-
         Task::create([
             'creator_id' => Auth::id(),
             'name' => $task->input('name'),
@@ -32,5 +32,9 @@ class TaskController extends Controller
 
 
         return redirect()->back();
+    }
+
+    public function add_image(Task $task, AddMediaRequest $request) {
+        $task->addMedia($request->image)->toMediaCollection('images');
     }
 }

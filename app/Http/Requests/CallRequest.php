@@ -24,6 +24,8 @@ class CallRequest extends FormRequest
         return [
             "name" => "required|string|max:255",
             "description" => "string|max:65535|nullable",
+            "images" => "sometimes|array",
+            "images.*.value" => "required|image|mimes:jpeg,png,jpg",
             "position" => "sometimes|array",
             "position.x" => "required_with:numeric:strict|min:0",
             "position.y" => "required_with:numeric:strict|min:0",

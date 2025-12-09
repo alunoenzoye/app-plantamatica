@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react';
 import CallInformationDialog from './call-information-dialog';
 import { CallManageDialog } from './call-manage-dialog';
 import usePermission from '@/hooks/use-permission';
+import { router } from '@inertiajs/react';
 
 interface callListProps {
     calls: App.Data.CallData[],
@@ -66,14 +67,27 @@ export default function CallList({ calls: calls }: callListProps) {
                                 <LucideGavel />
                             </Button>
                         )}
-                        <Button variant="outline" size="icon" disabled={(row.original.position === null || row.original.position === undefined)}>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            disabled={(row.original.position === null || row.original.position === undefined)}
+                            onClick={() => {
+                                router.visit(route("map.index"), {
+                                    method: 'get',
+                                    data: {
+                                        "go_to": row.original.id,
+                                        "go_to_category": 'call'
+                                    }
+                                })
+                            }}
+                        >
                             <LucideMapPinned />
                         </Button>
                     </div>
                 )
             })
         ]
-    }, [])
+    }, [can])
 
     return (
         <>
