@@ -8,12 +8,12 @@ import TaskInformationDialog from "@/components/task-information-dialog";
 import { useState } from "react";
 import { CallManageDialog } from "@/components/call-manage-dialog";
 
-interface callsProps {
+interface map {
     calls: App.Data.CallData[],
     tasks: App.Data.TaskData[],
 }
 
-export default function Calls({ calls, tasks }: callsProps) {
+export default function Map({ calls, tasks }: callsProps) {
     const [callInformationOpen, setCallInformationOpen] = useState(false)
     const [callManageDialogOpen, setCallManageDialogOpen] = useState(false)
     const [taskInformationOpen, setTaskInformationOpen] = useState(false)

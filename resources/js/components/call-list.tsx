@@ -66,7 +66,7 @@ export default function CallList({ calls: calls }: callListProps) {
                                 <LucideGavel />
                             </Button>
                         )}
-                        <Button variant="outline" size="icon">
+                        <Button variant="outline" size="icon" disabled={(row.original.position === null || row.original.position === undefined)}>
                             <LucideMapPinned />
                         </Button>
                     </div>

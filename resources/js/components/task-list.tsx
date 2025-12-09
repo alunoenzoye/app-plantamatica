@@ -116,10 +116,10 @@ export default function TaskList({ tasks }: taskListProps) {
                         >
                             <LucideExternalLink />
                         </Button>
-                        <Button variant="outline" size="icon">
+                        <Button variant="outline" size="icon" disabled={(row.original.position === null || row.original.position === undefined)}>
                             <LucideMapPinned />
                         </Button>
-                    </div>
+                    </div >
 
                 )
             })
