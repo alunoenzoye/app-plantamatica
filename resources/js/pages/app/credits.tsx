@@ -15,8 +15,8 @@ export default function Credits() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Painel" />
             <div className="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto items-center">
-                <div className="flex flex-col gap-2 mb-2">
-                    <h1 className='text-center text-4xl font-bold'>Creditos</h1>
+                <div className="text-center flex flex-col gap-2 mb-2">
+                    <h1 className='text-4xl font-bold'>Creditos</h1>
                     <p>Responsáveis pelo desenvolvimento do projeto</p>
                 </div>
                 <div className="flex gap-4 flex-wrap justify-center">
