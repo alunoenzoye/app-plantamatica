@@ -21,8 +21,8 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $user_role = Role::create(['name' => RolesEnum::user->value]);
-
         $maintenance_role = Role::create(['name' => RolesEnum::maintenance->value]);
+        $maintenance_role->givePermissionTo(PermissionsEnum::calls_manage);
         $maintenance_role->givePermissionTo(PermissionsEnum::calls_approve);
         $maintenance_role->givePermissionTo(PermissionsEnum::calls_delete);
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_index);
@@ -32,6 +32,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $maintenance_role->givePermissionTo(PermissionsEnum::tasks_complete);
 
         $principal_role = Role::create(['name' => RolesEnum::principal->value]);
+        $principal_role->givePermissionTo(PermissionsEnum::calls_manage);
         $principal_role->givePermissionTo(PermissionsEnum::calls_approve);
         $principal_role->givePermissionTo(PermissionsEnum::calls_delete);
         $principal_role->givePermissionTo(PermissionsEnum::tasks_index);
