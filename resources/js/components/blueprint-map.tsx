@@ -6,6 +6,7 @@ import React, { RefObject, SetStateAction, useEffect, useRef, useState } from "r
 import MapCallCreateForm from "./map-call-create-form"
 import getPriorityStyle from "@/utils/getPriorityStyle"
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectGroup, SelectLabel, SelectValue } from "./ui/select"
+import usePermission from "@/hooks/use-permission"
 
 interface coordinates {
     x: number,
@@ -320,6 +321,8 @@ interface mapFilterProps {
 }
 
 function MapFilter({ filter, setFilter }: mapFilterProps) {
+    const { can } = usePermission()
+
     return (
         <div className="absolute top-4 left-4 z-10">
             <Select
@@ -334,7 +337,9 @@ function MapFilter({ filter, setFilter }: mapFilterProps) {
                     <SelectGroup>
                         <SelectLabel>Filtros</SelectLabel>
                         <SelectItem value="all">Nenhum</SelectItem>
-                        <SelectItem value="tasks">Tarefas</SelectItem>
+                        {can("tasks.index") && (
+                            <SelectItem value="tasks">Tarefas</SelectItem>
+                        )}
                         <SelectItem value="calls">Chamados</SelectItem>
                     </SelectGroup>
                 </SelectContent>
@@ -355,6 +360,7 @@ export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelec
     const wrapperRef = useRef<HTMLDivElement | null>(null)
     const [creationState, setCreationState] = useState<creationState>("none")
     const [filter, setFilter] = useState<mapFilter>("all")
+    const { can } = usePermission()
 
     return (
         <div className="relative w-full h-full" ref={wrapperRef}>
@@ -391,7 +397,7 @@ export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelec
                                         />
                                     ))
                                 }
-                                {
+                                {can("tasks.index") && (
                                     tasks.map(task => (
                                         <TaskMarker
                                             onClick={() => {
@@ -403,6 +409,7 @@ export default function BlueprintMap({ calls, tasks, onCallSelected, onTaskSelec
                                                 && (filter === "all" || filter === "tasks")}
                                         />
                                     ))
+                                )
                                 }
                             </>
                             <div ref={mapRef}>
