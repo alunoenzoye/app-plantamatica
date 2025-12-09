@@ -21,7 +21,7 @@ class ApproveCallController extends Controller
                 'priority' => $request->input('priority'),
                 'due_date' => $request->input('due_date'),
                 'position' => $call->position,
-                'description' => $request->input('description'),
+                'description' => $call->description,
             ]);
 
             $call_images = $call->getMedia('images');
