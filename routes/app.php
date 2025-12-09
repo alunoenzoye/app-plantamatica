@@ -20,6 +20,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('creditos', function() {
         return Inertia::render('app/credits');
+    })->name('credits');
+
+    Route::get('creditos', function() {
+        return Inertia::render('app/credits');
     });
 
     Route::group(['middleware' => [Authorize::using(PermissionsEnum::tasks_index->value)]], function () {
