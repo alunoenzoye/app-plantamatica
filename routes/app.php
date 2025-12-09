@@ -18,6 +18,10 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('app/dashboard');
     })->name('dashboard');
 
+    Route::get('creditos', function() {
+        return Inertia::render('app/credits');
+    });
+
     Route::group(['middleware' => [Authorize::using(PermissionsEnum::tasks_index->value)]], function () {
         Route::get('tarefas', [TaskController::class, 'index'])->name('tasks.index');
     });
