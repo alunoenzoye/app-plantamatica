@@ -62,9 +62,11 @@ export default function CallInformationDialog({ call, open, setOpen, onManageCli
                                 image: imageList[0],
                             }, {
                                 onSuccess: () => {
-                                    router.reload()
                                     setOpen(false)
-                                }
+                                    router.reload({
+                                        preserveState: false,
+                                    })
+                                },
                             })
                         }}
                     />

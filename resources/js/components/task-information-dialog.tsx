@@ -18,7 +18,6 @@ interface callInformationDialogProps {
 
 export default function TaskInformationDialog({ task, open, setOpen, onTaskComplete }: callInformationDialogProps) {
     const { can } = usePermission()
-    const { url } = usePage()
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -71,9 +70,11 @@ export default function TaskInformationDialog({ task, open, setOpen, onTaskCompl
                                     image: imageList[0],
                                 }, {
                                     onSuccess: () => {
-                                        router.reload()
                                         setOpen(false)
-                                    }
+                                        router.reload({
+                                            preserveState: false,
+                                        })
+                                    },
                                 })
                             }}
                         />

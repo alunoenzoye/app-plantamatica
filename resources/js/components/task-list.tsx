@@ -27,7 +27,7 @@ export default function TaskList({ tasks }: taskListProps) {
         })
 
         if (taskIndex !== -1) {
-            taskData[taskIndex].done = mark
+            cloned[taskIndex].done = mark
         }
 
         setTaskData(cloned)
@@ -37,8 +37,10 @@ export default function TaskList({ tasks }: taskListProps) {
             {
                 done: mark
             }, {
-            onFinish: () => {
-                router.reload()
+            onSuccess: () => {
+                router.reload({
+                    preserveState: false,
+                })
             }
         }
         );

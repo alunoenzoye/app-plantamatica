@@ -47,7 +47,9 @@ export default function LinkedImageList({ images, onAddImages }: linkedImageList
                                         if (index !== -1) {
                                             images.splice(index, 1)
                                         }
-                                        router.reload()
+                                        router.reload({
+                                            preserveState: false,
+                                        })
                                     },
                                 })
                             }}>
